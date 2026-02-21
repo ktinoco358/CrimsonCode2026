@@ -10,9 +10,9 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
-// limitations under the License.
+// limitations under the License.s
 
-import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest";
+import { HandLandmarker, FilesetResolver, DrawingUtils } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest";
 
 const demosSection = document.getElementById("demos");
 let handLandmarker = undefined;
@@ -69,12 +69,20 @@ async function predictWebcam() {
 
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    if (results.landmarks) {
-        for (const landmarks of results.landmarks) {
-            drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 5 });
-            drawLandmarks(canvasCtx, landmarks, { color: "#FF0000", lineWidth: 2 });
-        }
+
+if (results.landmarks) {
+    const drawingUtils = new DrawingUtils(canvasCtx); // Create the helper
+    for (const landmarks of results.landmarks) {
+        drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, {
+            color: "#00FF00",
+            lineWidth: 5
+        });
+        drawingUtils.drawLandmarks(landmarks, {
+            color: "#FF0000",
+            lineWidth: 2
+        });
     }
+}
     canvasCtx.restore();
 
     if (webcamRunning) {
