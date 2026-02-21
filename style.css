@@ -36,6 +36,8 @@ em {
 video {
   clear: both;
   display: block;
+  width: 200px;
+  height: 200px;
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   -moz-transform: rotateY(180deg);
@@ -68,9 +70,10 @@ footer {
 .detectOnClick {
   position: relative;
   float: left;
-  width: 48%;
+  width: 5%;
   margin: 2% 1%;
   cursor: pointer;
+  background-color: #3d3d3d;
 }
 
 .videoView p,
@@ -78,7 +81,7 @@ footer {
   position: absolute;
   padding: 5px;
   background-color: #007f8b;
-  color: #fff;
+  color: red;
   border: 1px dashed rgba(255, 255, 255, 0.7);
   z-index: 2;
   font-size: 12px;
@@ -98,7 +101,9 @@ footer {
   pointer-events: none;
 }
 
+
 .output_canvas {
+ background-color: yellow;
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   -moz-transform: rotateY(180deg);
@@ -112,4 +117,15 @@ footer {
 
 .detectOnClick img {
   width: 100%;
+}
+
+
+.userTranslations {
+    display: flex;
+    border-color: black;
+    background-color: pink;
+    border-width: 12;
+
+    width: 300px;
+    height: 200px;
 }
