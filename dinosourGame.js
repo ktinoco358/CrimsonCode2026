@@ -1,4 +1,7 @@
 let player;
+let jumpCounter = 0;
+let isJumping = false;
+let gameOverText;
 
 //dinosaur class
 class Dinosaur extends Phaser.Physics.Arcade.Sprite {
@@ -29,8 +32,9 @@ function preload() {
 }
 
 let cursors; 
+let jumpText;
 
-//
+
 function create() {
     //Static group for ground so it stays in gplace
     let platforms = this.physics.add.staticGroup();
@@ -51,10 +55,37 @@ function create() {
 
     //allow to collide with ground and NOT fall
     this.physics.add.collider(player, platforms);
+
+    jumpText = this.add.text(2640, 150, 'Jump Counter: 0', {
+        font: '64px Arial',     // Font size and family
+        fill: '#000000',        // Text color
+        fontStyle: 'bold'       // Make the text bold
+    });
+    jumpText.setDepth(10);      // Make sure it appears above other objects
+    jumpText.setScrollFactor(0); // Keep text fixed on camera
+
+    gameOverText = this.add.text(
+        this.cameras.main.width / 2,
+        this.cameras.main.height / 2,
+        'GAME OVER\n Jumps: ' + jumpCounter + '\nRestarting...',
+        {
+            font: '96px Arial',       // Big font
+            fill: '#FF0000',          // Red color
+            fontStyle: 'bold',        // Bold
+            align: 'center'
+        }
+    );
+
+    gameOverText.setOrigin(0.5);       // Center the text
+    gameOverText.setScrollFactor(0);   // Stay fixed on camera
+    gameOverText.setVisible(false);    // Hide initially
 }
 
 function update() 
 {
+    if (player.body.touching.down || player.body.blocked.down) {
+        isJumping = false;
+    }
     obsticale.setVelocityX(-500); // Adjust speed as needed
     // Reset obstacle position when it goes off screen
     if (obsticale.x < 1200) { // Assuming obstacle width is less than 50
@@ -69,8 +100,22 @@ function update()
 
     //if it collides with obstical restart the game
     this.physics.add.collider(player, obsticale, () => {
-        console.log('Game Over!');
-        this.scene.restart(); // Restart the scene on collision
+        console.log('Game Over');
+
+        if (gameOverText) {
+            gameOverText.setText('GAME OVER\n Jumps: ' + jumpCounter + '\nRestarting...'); // Update text with jump count
+            gameOverText.setVisible(true); // Show "Game Over" text
+        }
+        player.setVelocity(0, 0); // Stop player movement
+        obsticale.setVelocity(0, 0); // Stop obstacle movement
+        player.body.moves = false; // Prevent player from moving
+        obsticale.body.moves = false; // Prevent obstacle from moving
+
+        this.time.delayedCall(2000, () => {
+            jumpCounter = 0; // Reset jump counter
+            this.scene.restart(); // Restart the scene on collision
+        });
+        
     }, null, this);
     
 }
@@ -94,9 +139,20 @@ const config = {
 
 const game = new Phaser.Game(config);
 
+
 // Add this to the bottom of dinosourGame.js
 window.dinoJump = function() {
-    if (player && (player.body.touching.down || player.body.blocked.down)) {
-        player.setVelocityY(-600);
+    // Only jump if player is on the ground AND not currently jumping
+    if (player && (player.body.touching.down || player.body.blocked.down) && !isJumping) {
+        player.setVelocityY(-600); // Make the dino jump
+        isJumping = true;          // Flag that dino is in the air
+
+        // Increment jump counter
+        jumpCounter++;
+
+        // Update the on-screen counter if it exists
+        if (jumpText) {
+            jumpText.setText('Jump Counter: ' + jumpCounter);
+        }
     }
 }
