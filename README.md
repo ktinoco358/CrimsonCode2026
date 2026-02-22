@@ -1,6 +1,9 @@
 # CrimsonCode2026
 
 
+
+WE used code from the visual finger reader from the MediaPipe library. Heres the disclosure they wanted
+
 Copyright [yyyy] [name of copyright owner]
 
 Licensed under the Apache License, Version 2.0 (the "License");
