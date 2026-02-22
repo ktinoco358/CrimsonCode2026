@@ -25,9 +25,9 @@ function create() {
 
 
     jumpText = this.add.text(this.cameras.main.width - 20, 20, 'Jump Counter: 0', {
-        fontFamily: 'star', 
+        fontFamily: 'sans', 
         fontSize: '32px',
-        fill: '#1e1f20',
+        fill: '#FFFFFF',
         fontStyle: 'bold'
     });
     
