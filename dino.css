@@ -39,6 +39,9 @@ header {
   z-index: 20;
   padding: 10px 20px;
   pointer-events: none;
+  color: white;
+  font-family: 'star', sans-serif;
+  font-size: 40px;
 }
 
 
@@ -47,11 +50,11 @@ header h1 {
   left: 20px;
   top: 10px;
   margin: 0;
-  font-family: 'star', sans-serif;
-  font-size: 32px;
-  color: white;
-  padding: 10px; 
-  background: rgba(255, 255, 255, 0.1); 
+  font-family: 'sans', sans-serif;
+  font-size: 80px;
+  padding: 40px; 
+  width: 160px;
+  /* background: red; */
   border-radius: 8px;
   pointer-events: auto;
 }
