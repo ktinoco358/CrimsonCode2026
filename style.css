@@ -12,120 +12,107 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-@use "@material";
-body {
-  font-family: roboto;
-  margin: 2em;
-  color: #3d3d3d;
-  --mdc-theme-primary: #007f8b;
-  --mdc-theme-on-primary: #f1f3f4;
-}
+@font-face {
+    font-family: 'star'; /* Name your font family */
+    src: url('assets/shooting-star-personal-use/Shooting\ Star.ttf') format('ttf'),
+         url('assets/shooting-star-personal-use/Shooting\ Star.ttf') format('ttf'),
+         url('assets/shooting-star-personal-use/Shooting\ Star.ttf') format('truetype'); /* Fallback format */
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; /* Improves performance by preventing invisible text during load */
+  }
 
-h1 {
-  color: #007f8b;
-}
-
-h2 {
-  clear: both;
-}
-
-em {
-  font-weight: bold;
-}
-
-video {
-  clear: both;
-  display: block;
-  width: 200px;
-  height: 200px;
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-}
-
-section {
-  opacity: 1;
-  transition: opacity 500ms ease-in-out;
-}
-
-header,
-footer {
-  clear: both;
-}
-
-.removed {
-  display: none;
-}
-
-.invisible {
-  opacity: 0.2;
-}
-
-.note {
-  font-style: italic;
-  font-size: 130%;
-}
-
-.videoView,
-.detectOnClick {
-  position: relative;
-  float: left;
-  width: 5%;
-  margin: 2% 1%;
-  cursor: pointer;
-  background-color: #3d3d3d;
-}
-
-.videoView p,
-.detectOnClick p {
-  position: absolute;
-  padding: 5px;
-  background-color: #007f8b;
-  color: red;
-  border: 1px dashed rgba(255, 255, 255, 0.7);
-  z-index: 2;
-  font-size: 12px;
-  margin: 0;
-}
-
-.highlighter {
-  background: rgba(0, 255, 0, 0.25);
-  border: 1px dashed #fff;
-  z-index: 1;
-  position: absolute;
-}
-
-.canvas {
-  z-index: 1;
-  position: absolute;
-  pointer-events: none;
+@font-face {
+    font-family: 'sans';
+    src: url('assets/Smooch_Sans/SmoochSans-VariableFont_wght.ttf') format('ttf'),
+         url('assets/Smooch_Sans/SmoochSans-VariableFont_wght.ttf') format('ttf'),
+         url('assets/Smooch_Sans/SmoochSans-VariableFont_wght.ttf') format('truetype'); /* Fallback format */
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; /* Improves performance by preventing invisible text during load */
 }
 
 
-.output_canvas {
- background-color: yellow;
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-  z-index: 10;
-  pointer-events: none;
-}
-
-.detectOnClick {
-  z-index: 0;
-}
-
-.detectOnClick img {
-  width: 100%;
-}
-
-
-.userTranslations {
+main {
+    flex: 1;              /* THIS makes body stretch fully */
     display: flex;
-    border-color: black;
-    background-color: pink;
-    border-width: 12;
+    flex-direction: column;
+}
 
-    width: 300px;
-    height: 200px;
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;           /* full screen height */
+    display: flex;
+    flex-direction: column;      /* stack header, main, footer */
+}
+
+#header h1 {
+    margin-bottom: 0;
+    margin-top: 1 px;
+    padding: 0;
+    font-family: 'star', sans-serif;
+    color: black;
+    font-size: 7cap;
+    font-weight: 1cap;
+    text-align: center;
+    line-height: 1;
+
+}
+
+#header h2 {
+    margin-bottom: 0;
+    margin-top: 15px;
+    padding: 0;
+    font-family: 'sans', sans-serif;
+    color: black;
+    font-size: 3.5cap;
+    font-weight: 1cap;
+    text-align: center;
+    line-height: 1;
+}
+
+
+#info {
+    flex: 9;
+
+    display: flex;
+    justify-content: center;   /* horizontal center */
+    align-items: center;       /* vertical center */
+
+    margin: 0;
+    padding: 0;
+}
+
+#info h1 {
+    margin: 0;                 /* remove default h1 spacing */
+    font-family: sans-serif;
+    font-weight: lighter;
+    color: #878787;
+    text-align: center;
+    font-size: 2cap;
+
+}
+
+#selection{
+    margin: 0;
+    padding: 0;
+    background-color: #F0F0F0;
+    display: flex;
+    justify-content: center;   /* centers horizontally */
+    align-items: center;       /* keeps them aligned vertically */
+    gap: 100px;   
+    flex: 1;              
+
+}
+
+#selection  button {
+    width: 120px;
+    height: 120px;
+}
+
+footer {
+    text-align: center;
+    font-family: 'sans', sans-serif;
+    padding: 10px;
 }

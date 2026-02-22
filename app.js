@@ -1,26 +1,22 @@
-// Copyright 2023 The MediaPipe Authors.
+import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest";
 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+const video = document.getElementById("webcam");
+const canvasElement = document.getElementById("output_canvas");
+const canvasCtx = canvasElement.getContext("2d");
+const toggleButton = document.getElementById("webcamButton");
 
-//      http://www.apache.org/licenses/LICENSE-2.0
-
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.s
-
-import { HandLandmarker, FilesetResolver, DrawingUtils } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest";
-
-const demosSection = document.getElementById("demos");
 let handLandmarker = undefined;
-let runningMode = "IMAGE";
 let webcamRunning = false;
+let trackingEnabled = false; 
+let isCanvasSized = false;
+let lastVideoTime = -1;
+let dwellStartTime = null;
+const DWELL_DURATION = 1000;
+let isClicked = false;
+let brushColor = "black"; // Default color
 
-// Initialize the Landmarker
-const createHandLandmarker = async () => {
+// 1. Initialize AI and then Start Camera
+const setup = async () => {
     const vision = await FilesetResolver.forVisionTasks(
         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
     );
@@ -29,102 +25,107 @@ const createHandLandmarker = async () => {
             modelAssetPath: `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task`,
             delegate: "GPU"
         },
-        runningMode: runningMode,
+        runningMode: "VIDEO",
         numHands: 2
     });
-    demosSection.classList.remove("invisible");
+
+    // Remove the "invisible" class so we can see the app
+    document.getElementById("demos").classList.remove("invisible");
+    startCamera();
 };
-createHandLandmarker();
 
-const video = document.getElementById("webcam");
-
-const translation = document.getElementById("userTranslation");
-
-const userCanvas = document.getElementById("output_canvas");
-const userCan = userCanvas.getContext("2d");
-
-const canvasElement = document.getElementById("output_canvas");
-const canvasCtx = canvasElement.getContext("2d");
-const enableWebcamButton = document.getElementById("webcamButton");
-
-function enableCam(event) {
-    if (!handLandmarker) return;
-    webcamRunning = !webcamRunning;
-    enableWebcamButton.innerText = webcamRunning ? "DISABLE PREDICTIONS" : "ENABLE PREDICTIONS";
-
-    const constraints = { video: true };
-    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+const startCamera = async () => {
+    try {
+        const constraints = { video: true };
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
         video.srcObject = stream;
-        video.addEventListener("loadeddata", predictWebcam);
-    });
-}
+        video.addEventListener("loadeddata", () => {
+            webcamRunning = true;
+            predictWebcam();
+        });
+    } catch (err) {
+        console.error("Camera access denied!", err);
+    }
+};
 
-enableWebcamButton.addEventListener("click", enableCam);
+// 2. Toggle Tracking (The "Enable Webcam" button now toggles the AI)
+toggleButton.addEventListener("click", () => {
+    trackingEnabled = !trackingEnabled;
+});
 
 async function predictWebcam() {
-    canvasElement.width = video.videoWidth;
-    canvasElement.height = video.videoHeight;
-    
-    if (runningMode === "IMAGE") {
-        runningMode = "VIDEO";
-        await handLandmarker.setOptions({ runningMode: "VIDEO" });
+    if (!isCanvasSized && video.videoWidth > 0) {
+        canvasElement.width = window.innerWidth;
+        canvasElement.height = window.innerHeight;
+        isCanvasSized = true;
     }
 
     let startTimeMs = performance.now();
-    const results = handLandmarker.detectForVideo(video, startTimeMs);
+    
+    if (lastVideoTime !== video.currentTime) {
+        lastVideoTime = video.currentTime;
+        const results = handLandmarker.detectForVideo(video, startTimeMs);
 
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+        if (trackingEnabled && results.landmarks && results.landmarks.length > 0) {
+            const hand = results.landmarks[0];
+            const indexTip = hand[8];
+    
+            const mirroredX = (1 - indexTip.x) * canvasElement.width;
+            const pixelY = indexTip.y * canvasElement.height;
+            const pixelX = indexTip.x * canvasElement.width;
+    
+            // Detect all buttons (Main button + Color buttons)
+            const allButtons = document.querySelectorAll("button");
+            let isOverAnyButton = false;
 
-    if (results.landmarks) {
-        const drawingUtils = new DrawingUtils(canvasCtx); // Create the helper
-
-        // for (const landmarks of results.landmarks) {
-        //     drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, {
-        //         color: "#00FF00",
-        //         lineWidth: 5
-        //     });
-        //     drawingUtils.drawLandmarks(landmarks, {
-        //         color: "#FF0000",
-        //         lineWidth: 2
-        //     });
-        // }
-
-
-        // 1. Loop through each detected hand
-        results.landmarks.forEach((hand, handIndex) => {
-        console.log(`--- Hand #${handIndex} ---`);
-
-        // 2. Access specific points (Landmarks)
-        // Let's get the Index Finger Tip (Landmark #8)
-        const indexTip = hand[8];
-        
-        // 3. Print the normalized coordinates (0.0 to 1.0)
-        console.log(`Index Tip - X: ${indexTip.x.toFixed(2)}, Y: ${indexTip.y.toFixed(2)}`);
-
-        const widthT = userCanvas.width;
-        const heightT = userCanvas.height;
-
-        // 4. Convert to actual pixel positions for your screen
-        const pixelX = Math.round(indexTip.x * widthT);
-        const pixelY = Math.round(indexTip.y * heightT);
-
-        console.log(`Canvas Resolution: ${widthT} x ${heightT}`);
-        
-        console.log(`Finger is at Pixel: ${pixelX}px, ${pixelY}px`);
-
-        userCan.fillStyle = "black"
-        userCan.fillRect(pixelX, pixelY, 20, 20);
+            allButtons.forEach(btn => {
+                const rect = btn.getBoundingClientRect();
+                
+                if (mirroredX >= rect.left && mirroredX <= rect.right && 
+                    pixelY >= rect.top && pixelY <= rect.bottom) {
+                    
+                    isOverAnyButton = true;
+                    if (!dwellStartTime) dwellStartTime = Date.now();
+                    const elapsed = Date.now() - dwellStartTime;
 
 
+                    if (elapsed >= DWELL_DURATION && !isClicked) {
+                        btn.click();
+                        // If it's a color button, update the brush
+                        const style = window.getComputedStyle(btn);
+                        brushColor = style.backgroundColor;
+                        
+                        isClicked = true;
+                        dwellStartTime = null;
+                    }
+                }
+            });
 
-    });
+            if (!isOverAnyButton) {
+                dwellStartTime = null;
+                isClicked = false;
+            }
 
 
+            // Draw a simple cursor so you can see where you are pointing
+            canvasCtx.lineWidth = 2;
+            canvasCtx.strokeStyle = "rgba(0,0,0,0.5)";
+            canvasCtx.beginPath();
+            canvasCtx.arc(mirroredX, pixelY, 10, 0, Math.PI * 2);
+            canvasCtx.stroke();
+
+
+            
+            // Draw the brush
+            canvasCtx.fillStyle = brushColor;
+            canvasCtx.fillRect(mirroredX - 5, pixelY - 5, 10, 10);
+        }
     }
-    canvasCtx.restore();
 
     if (webcamRunning) {
         window.requestAnimationFrame(predictWebcam);
     }
 }
+
+// Kick off the script
+setup();

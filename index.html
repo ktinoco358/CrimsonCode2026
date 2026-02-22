@@ -15,36 +15,56 @@ limitations under the License. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
-    <title>Hand Landmarker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title Screen</title>
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <h1>Hand landmark detection</h1>
+    <body>
+        <header id="header">
+            <h1>Handy Games</h1>
+            <h2>keyboardless fun ig</h2>
+        </header>
 
-  <section id="demos" class="invisible">
-    <div id="liveView" class="videoView">
-      <button id="webcamButton" class="mdc-button mdc-button--raised">
-        <span class="mdc-button__label">ENABLE WEBCAM</span>
-      </button>
-      <div style="position: relative;">
-        <video id="webcam" autoplay playsinline></video>
-        <canvas class="output_canvas" id="output_canvas" style="position: absolute; left: 0px; top: 0px;"></canvas>
-      </div>
-    </div>
-  </section>
+        <main> 
+        
+            <section id="info">
+                <h1>All your action are controlled by your fingers, use your index finger select a game you'd like to play</h1>
+            </section>
 
-  <section id="translation">
-    <div id = "box">
-        <canvas class="userTranslations" id="userTranslations" style="position: absolute; right: 0px; top: 0px;"></canvas>
-    </div>
+            
+
+            <section id ="selection">
+                <button id="drawingGame"></button>
+                <button id="tRexGame"></button>
+                <button id="commingSoon"></button>
+            </section>
+
+        </main>
 
 
-  </section>
+        <footer>
+            <h1> contact us </h1>
 
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.1/hands.js" crossorigin="anonymous"></script>
-  <script type="module" src="app.js"></script>
-</body>
+        </footer>
+
+        <!-- <section id="demos" class="invisible"> -->
+        <!-- <div id="liveView" class="videoView">
+        <button id="webcamButton" class="mdc-button mdc-button--raised">
+            <span class="mdc-button__label">ENABLE WEBCAM</span>
+        </button>
+        <div style="position: relative;">
+            <video id="webcam" autoplay playsinline></video>
+            <canvas class="output_canvas" id="output_canvas" style="position: absolute; left: 0px; top: 0px;"></canvas>
+        </div>
+        </div>
+        </section> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.1/hands.js" crossorigin="anonymous"></script>
+    <script type="module" src="app.js"></script>
+    </body>
 </html>

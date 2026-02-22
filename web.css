@@ -1,0 +1,194 @@
+/* Make the body fill the whole screen */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Prevents scrollbars */
+
+  }
+
+
+  
+  /* Make the container full screen */
+  .videoView {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    background-color: #d5d0c7;
+  }
+  
+/* Force video to be invisible but active */
+video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;           /* Lowest layer */
+  opacity: 0;           /* THIS HIDES YOU */
+  transform: rotateY(180deg);
+}
+
+.output_canvas {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;           /* Above the hidden video */
+  background-color: #d5d0c7; /* This becomes your "paper" color */
+  transform: rotateY(180deg);
+  pointer-events: none;
+}
+  
+  /* Keep the button on top of everything */
+  #webcamButton {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+  }
+
+  #paintColors {
+    position: fixed;              /* make it stick to the viewport */
+    bottom: 20px;                 /* distance from bottom */
+    left: 50%;                    /* start at horizontal center */
+    transform: translateX(-50%);  /* center it exactly */
+    z-index:100;
+    
+    display: grid;
+    grid-template-columns: repeat(14, 40px); /* 14 columns */
+    grid-template-rows: repeat(2, 40px);     /* 2 rows */
+    gap: 5px;                                /* space between buttons */
+    margin-top: 10px;
+  }
+  
+  #paintColors button {
+
+    border-top: 2px solid black;   /* top border */
+    border-left: 2px solid black;  /* left border */
+    border-right: 2px solid #f4f1ec;             /* no right border */
+    border-bottom: 2px solid #f4f1ec;            /* no bottom border */
+
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+
+  #c1 {
+    background-color: black;
+  }
+
+  #c2 {
+    background-color: #808080;
+  }
+
+  #c3 {
+    background-color: #7f0000;
+  }
+
+  #c4 {
+    background-color: #808000;
+  }
+
+  #c5 {
+    background-color: #008001;
+  }
+
+  #c6 {
+    background-color: #008080;
+  }
+
+  #c7 {
+    background-color: #000080;
+  }
+
+  #c8 {
+    background-color: #7f0080;
+  }
+
+  #c9 {
+    background-color: #a3a17c;
+  }
+
+  #c10 {
+    background-color: #004041;
+  }
+
+  #c11 {
+    background-color: #0080ff;
+  }
+
+  #c12 {
+    background-color: #004080;
+  }
+
+  #c13 {
+    background-color: #8000ff;
+  }
+
+  #c14 {
+    background-color: #804100;
+  }
+
+  #c15 {
+    background-color: #ffffff;
+  }
+
+  #c16 {
+    background-color: #bfbfbf;
+  }
+
+  #c17 {
+    background-color: #fe0100;
+  }
+
+  #c18 {
+    background-color: #ffff00;
+  }
+
+  #c19 {
+    background-color: #00ff00;
+  }
+
+  #c20 {
+    background-color: #02ffff;
+  }
+
+  #c21 {
+    background-color: #0000ff;
+  }
+
+  #c22 {
+    background-color: #fe01ff;
+  }
+
+  #c23 {
+    background-color: #ffff80;
+  }
+
+  #c24 {
+    background-color: #00ff7f;
+  }
+
+  #c25 {
+    background-color: #7fffff;
+  }
+
+  #c26 {
+    background-color: #8080ff;
+  }
+
+  #c27 {
+    background-color: #fe0181;
+  }
+
+  #c28 {
+    background-color: #fe7f41;
+  }
