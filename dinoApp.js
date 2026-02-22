@@ -59,22 +59,22 @@ async function predictWebcam() {
     let startTimeMs = performance.now();
     const results = handLandmarker.detectForVideo(video, startTimeMs);
 
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    //canvasCtx.save();
+    //canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
     if (results.landmarks) {
         const drawingUtils = new DrawingUtils(canvasCtx); // Create the helper
 
-        // for (const landmarks of results.landmarks) {
-        //     drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, {
-        //         color: "#00FF00",
-        //         lineWidth: 5
-        //     });
-        //     drawingUtils.drawLandmarks(landmarks, {
-        //         color: "#FF0000",
-        //         lineWidth: 2
-        //     });
-        // }
+        for (const landmarks of results.landmarks) {
+             drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, {
+                 color: "#00FF00",
+                 lineWidth: 5
+             });
+             drawingUtils.drawLandmarks(landmarks, {
+                 color: "#FF0000",
+                 lineWidth: 2
+             });
+         }
 
 
         // 1. Loop through each detected hand
@@ -95,27 +95,34 @@ async function predictWebcam() {
         const pixelX = Math.round(indexTip.x * widthT);
         const pixelY = Math.round(indexTip.y * heightT);
         
-        if (indexTip.y < 0.5) {
-        // We call the function from your Phaser file
-        if (typeof window.dinoJump === "function") {
-            window.dinoJump();
-        }
-    }
         console.log(`Canvas Resolution: ${widthT} x ${heightT}`);
         
         console.log(`Finger is at Pixel: ${pixelX}px, ${pixelY}px`);
 
-        userCan.fillStyle = "red"
-        userCan.fillRect(pixelX, pixelY, 20, 20);
+        // Draw a red box at the fingertip
+        const boxSize = 40;
+        canvasCtx.fillStyle = "rgba(255, 0, 0, 0.7)";
+        canvasCtx.fillRect(
+            pixelX - boxSize / 2,
+            pixelY - boxSize / 2,
+            boxSize,
+            boxSize
+            );
+
+        //Tigger the jump
+        if (indexTip.y < 0.5) {
+            // We call the function from your Phaser file
+            if (typeof window.dinoJump === "function") {
+                window.dinoJump();
+            }
+        }
     });
-
-
     }
-    canvasCtx.restore();
 
     if (webcamRunning) {
         window.requestAnimationFrame(predictWebcam);
     }
+    canvasCtx.restore();
 }
 
 async function startWebcamAutomatically() {

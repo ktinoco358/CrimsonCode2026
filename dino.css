@@ -21,7 +21,16 @@ limitations under the License. */
   --mdc-theme-on-primary: #f1f3f4;
   max-width: fit-content;
   overflow: hidden;  /* hide scrollbars */
+  z-index: 0
 
+}
+#webcam {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* behind everything */
 }
 
 h1 {
@@ -57,21 +66,6 @@ footer {
   font-size: 130%;
 }
 
-.videoView,
-.detectOnClick p {
-  overflow: hidden;  /* hide scrollbars */
-  position: relative;
-  padding: 5px;
-  background-color: #007f8b;
-  color: red;
-  width: 100%;
-  height: 100%;
-  border: 1px dashed rgba(255, 255, 255, 0.7);
-  z-index: 2;
-  font-size: 12px;
-  margin: 0;
-}
-
 .highlighter {
   background: rgba(0, 255, 0, 0.25);
   border: 1px dashed #fff;
@@ -82,20 +76,7 @@ footer {
 .canvas {
   overflow: hidden;  /* hide scrollbars */
   z-index: 1;
-  position: center;
   pointer-events: none;
-}
-
-
-.output_canvas {
-  overflow: hidden;  /* hide scrollbars */
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  pointer-events: none;
-  transform: rotateY(180deg);
 }
 
 .detectOnClick {
@@ -114,4 +95,15 @@ footer {
     width: 100%;
     height: 100%;
     z-index: 1;
+}
+
+#output_canvas {
+  position: absolute;
+  overflow: hidden;  /* hide scrollbars */
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
 }
