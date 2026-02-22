@@ -1,27 +1,73 @@
-/* Make the body fill the whole screen */
+/* Copyright 2023 The MediaPipe Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. */
+
+@font-face {
+  font-family: 'star'; 
+  src: url('assets/shooting-star-personal-use/Shooting\ Star.ttf') format('ttf'),
+       url('assets/shooting-star-personal-use/Shooting\ Star.ttf') format('ttf'),
+       url('assets/shooting-star-personal-use/Shooting\ Star.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'sans';
+  src: url('assets/Smooch_Sans/SmoochSans-VariableFont_wght.ttf') format('ttf'),
+       url('assets/Smooch_Sans/SmoochSans-VariableFont_wght.ttf') format('ttf'),
+       url('assets/Smooch_Sans/SmoochSans-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; 
+}
+
 body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden; /* Prevents scrollbars */
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
-  }
+.canvas-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
 
+#ui_canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 200;
+  pointer-events: none;
+  transform: none;
+}
 
+.videoView {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  background-color: #d5d0c7;
+}
   
-  /* Make the container full screen */
-  .videoView {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    background-color: #d5d0c7;
-  }
-  
-/* Force video to be invisible but active */
+/* hides vod */
 video {
   width: 100vw;
   height: 100vh;
@@ -29,57 +75,126 @@ video {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 0;           /* Lowest layer */
-  opacity: 0;           /* THIS HIDES YOU */
+  z-index: 0;          
+  opacity: 0;          
   transform: rotateY(180deg);
 }
 
 .output_canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 100vh;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;           /* Above the hidden video */
-  background-color: #d5d0c7; /* This becomes your "paper" color */
+  z-index: 1;
+  background-color: #d5d0c7;
   transform: rotateY(180deg);
-  pointer-events: none;
+}
+
+.output_canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  background-color: #d5d0c7;
+  transform: none;
 }
   
-  /* Keep the button on top of everything */
-  #webcamButton {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 100;
-  }
+#webcamButton {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 100;
+}
 
-  #paintColors {
-    position: fixed;              /* make it stick to the viewport */
-    bottom: 20px;                 /* distance from bottom */
-    left: 50%;                    /* start at horizontal center */
-    transform: translateX(-50%);  /* center it exactly */
-    z-index:100;
-    
-    display: grid;
-    grid-template-columns: repeat(14, 40px); /* 14 columns */
-    grid-template-rows: repeat(2, 40px);     /* 2 rows */
-    gap: 5px;                                /* space between buttons */
-    margin-top: 10px;
-  }
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 150;
+  font-family: 'sans';
+  font-size: 35px;
+  padding: 0;
+  margin: 0;
+}
+
+#homePage {
+  position: absolute; 
+  left: -40px;         
+  top: 25%;
+  transform: translateY(-50%);
+  width: 300px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'star', sans-serif;
+  font-size: 32px;
+  z-index: 151;
+  margin: 0;
+  padding: 0;
+}
+
+header h1 {
+  font-family: 'sans', sans-serif;
+  font-size: 20px;
+  margin: 0;
+  text-align: center;
+  pointer-events: none;
+}
+
+#toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 90px;
+  background:#c8c4bc;
+  padding: 10px;
+  display: flex;
+  align-items:center;
+  justify-content: center;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+
+#toolbarContent {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#paintColors {
+  z-index: 100;
+  display: flex;
+  flex-wrap: wrap;
+  position: fixed;             
+  bottom: 20px;         
+  left: 50%;         
+  transform: translateX(-50%);  
+  display: grid;
+  grid-template-columns: repeat(14, 40px);
+  grid-template-rows: repeat(2, 40px);     
+  gap: 5px;                              
+  margin-top: 10px;
+}
   
-  #paintColors button {
-
-    border-top: 2px solid black;   /* top border */
-    border-left: 2px solid black;  /* left border */
-    border-right: 2px solid #f4f1ec;             /* no right border */
-    border-bottom: 2px solid #f4f1ec;            /* no bottom border */
-
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-  }
+#paintColors button {
+  border-top: 2px solid black;   
+  border-left: 2px solid black; 
+  border-right: 2px solid #f4f1ec;           
+  border-bottom: 2px solid #f4f1ec;           
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
 
   #c1 {
     background-color: black;
@@ -192,3 +307,78 @@ video {
   #c28 {
     background-color: #fe7f41;
   }
+
+
+#tools,
+#brushes {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+  
+#tools button,
+#brushes button {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  border: none;
+}
+
+#brushes {
+  margin-left: 390px;
+  margin-bottom: 10px;
+
+}
+
+#tools {
+  margin-right: 300px;
+  margin-bottom: 10px;
+}
+
+#pencil {
+  background-color: transparent;
+  background-image: url('assets/tools/pencil.png');
+  background-repeat: no-repeat;
+  height: 80px;
+  width: 80px;
+}
+
+#eraser {
+  background-color: transparent;
+  background-image: url('assets/tools/ereaser.png');
+  background-repeat: no-repeat;
+  height: 80px;
+  width: 80px;
+}
+
+#clear {
+  background-color: transparent;
+  background-image: url('assets/tools/clearScreen.png');
+  background-repeat: no-repeat;
+  height: 80px;
+  width: 80px;
+}
+
+#circle {
+  background-color: transparent;
+  background-image: url('assets/tools/circle.png');
+  background-repeat: no-repeat;
+  height: 80px;
+  width: 80px;
+}
+
+#triangle {
+  background-color: transparent;
+  background-image: url('assets/tools/triangle.png');
+  background-repeat: no-repeat;
+  height: 80px;
+  width: 80px;
+}
+
+#square {
+  background-color: transparent;
+  background-image: url('assets/tools/square.png');
+  background-repeat: no-repeat;
+  height: 80px;
+  width: 80px;
+}

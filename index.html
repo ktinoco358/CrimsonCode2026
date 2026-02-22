@@ -32,36 +32,31 @@ limitations under the License. -->
         <main> 
         
             <section id="info">
-                <h1>All your action are controlled by your fingers, use your index finger select a game you'd like to play</h1>
+                <h1>All your action are controlled by your fingers, user your index to select a game and start playing</h1>
             </section>
 
-            
 
             <section id ="selection">
-                <button id="drawingGame"></button>
-                <button id="tRexGame"></button>
-                <button id="commingSoon"></button>
+                <button id="drawingGame" class="game-btn"></button>
+                <button id="tRexGame" class="game-btn"></button>
+                <button id="commingSoon" class="game-btn"></button>
             </section>
 
         </main>
 
 
         <footer>
-            <h1> contact us </h1>
+            <h1> check us out at xyz.com </h1>
 
         </footer>
 
-        <!-- <section id="demos" class="invisible"> -->
-        <!-- <div id="liveView" class="videoView">
-        <button id="webcamButton" class="mdc-button mdc-button--raised">
-            <span class="mdc-button__label">ENABLE WEBCAM</span>
-        </button>
-        <div style="position: relative;">
-            <video id="webcam" autoplay playsinline></video>
-            <canvas class="output_canvas" id="output_canvas" style="position: absolute; left: 0px; top: 0px;"></canvas>
-        </div>
-        </div>
-        </section> -->
+        <section id="demos">
+            <div id="liveView" class="videoView">
+              <video id="webcam" autoplay playsinline></video>
+              <canvas class="output_canvas" id="output_canvas"></canvas>
+              <canvas id="ui_canvas" style="position: absolute; left: 0px; top: 0px;"></canvas>
+            </div>
+        </section>
 
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.1/hands.js" crossorigin="anonymous"></script>
