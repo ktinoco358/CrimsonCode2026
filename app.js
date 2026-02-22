@@ -52,7 +52,9 @@ function enableCam(event) {
     webcamRunning = !webcamRunning;
     enableWebcamButton.innerText = webcamRunning ? "DISABLE PREDICTIONS" : "ENABLE PREDICTIONS";
 
-    const constraints = { video: true };
+    const constraints = { 
+        video: {width: 1920, height: 1080 } 
+    };
     navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
         video.srcObject = stream;
         video.addEventListener("loadeddata", predictWebcam);
@@ -98,7 +100,7 @@ async function predictWebcam() {
         // 2. Access specific points (Landmarks)
         // Let's get the Index Finger Tip (Landmark #8)
         const indexTip = hand[8];
-        
+     
         // 3. Print the normalized coordinates (0.0 to 1.0)
         console.log(`Index Tip - X: ${indexTip.x.toFixed(2)}, Y: ${indexTip.y.toFixed(2)}`);
 
@@ -108,16 +110,19 @@ async function predictWebcam() {
         // 4. Convert to actual pixel positions for your screen
         const pixelX = Math.round(indexTip.x * widthT);
         const pixelY = Math.round(indexTip.y * heightT);
-
+        
+        if (indexTip.y < 0.2) {
+        // We call the function from your Phaser file
+        if (typeof window.dinoJump === "function") {
+            window.dinoJump();
+        }
+    }
         console.log(`Canvas Resolution: ${widthT} x ${heightT}`);
         
         console.log(`Finger is at Pixel: ${pixelX}px, ${pixelY}px`);
 
         userCan.fillStyle = "black"
         userCan.fillRect(pixelX, pixelY, 20, 20);
-
-
-
     });
 
 

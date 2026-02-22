@@ -19,6 +19,8 @@ limitations under the License. -->
     <title>Hand Landmarker</title>
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dinosourStyle.css"> <!-- ADD THIS: Your Dino Game Styles -->
+
 </head>
 <body>
   <h1>Hand landmark detection</h1>
@@ -35,14 +37,11 @@ limitations under the License. -->
     </div>
   </section>
 
-  <section id="translation">
-    <div id = "box">
-        <canvas class="userTranslations" id="userTranslations" style="position: absolute; right: 0px; top: 0px;"></canvas>
-    </div>
-
-
-  </section>
-
+  <div id="game-container"> 
+    
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser-arcade-physics.min.js"></script>
+  <script src="dinosourGame.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.1/hands.js" crossorigin="anonymous"></script>
   <script type="module" src="app.js"></script>
