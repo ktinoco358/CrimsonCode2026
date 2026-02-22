@@ -2,7 +2,8 @@
 
 
 
-WE used code from the visual finger reader from the MediaPipe library. Heres the disclosure they wanted
+WE used code from the visual finger reader from the MediaPipe library. Heres the disclosure they wanted us to put. 
+We eneded up modifying a lot of it for our needs.
 
 Copyright [yyyy] [name of copyright owner]
 
