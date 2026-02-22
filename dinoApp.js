@@ -66,7 +66,7 @@ async function predictWebcam() {
             if (window.dinoJump) window.dinoJump();
         }
 
-        canvasCtx.fillStyle = "#007f8b";
+        canvasCtx.fillStyle = "#D3D3D3";
         canvasCtx.beginPath();
         canvasCtx.arc(pixelX, pixelY, 10, 0, Math.PI * 2);
         canvasCtx.fill();
