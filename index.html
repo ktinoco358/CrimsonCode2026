@@ -16,16 +16,16 @@ limitations under the License. -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hand Landmarker</title>
+    <title>Dinosaur Game</title>
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="dinosourStyle.css"> <!-- ADD THIS: Your Dino Game Styles -->
 
 </head>
 <body>
-  <h1>Hand landmark detection</h1>
+  <h1>Temu Dinosaur Game</h1>
 
-  <section id="demos" class="invisible">
+  <section id="demos" style="display: none;">
     <div id="liveView" class="videoView">
       <button id="webcamButton" class="mdc-button mdc-button--raised">
         <span class="mdc-button__label">ENABLE WEBCAM</span>
@@ -40,10 +40,11 @@ limitations under the License. -->
   <div id="game-container"> 
     
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser-arcade-physics.min.js"></script>
   <script src="dinosourGame.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.1/hands.js" crossorigin="anonymous"></script>
-  <script type="module" src="app.js"></script>
+  <script type="module" src="dinoApp.js"></script>
 </body>
 </html>

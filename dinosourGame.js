@@ -24,12 +24,13 @@ class Obstacle extends Phaser.Physics.Arcade.Sprite {
 //preload() characters
 function preload() {
     this.load.image('dino', 'assets/dino.png');
-    this.load.image('ground', 'assets/ground.png');
+    this.load.image('ground', 'assets/ground1.png');
     this.load.image('obstacle', 'assets/cactus.png');
 }
 
 let cursors; 
 
+//
 function create() {
     //Static group for ground so it stays in gplace
     let platforms = this.physics.add.staticGroup();
@@ -38,15 +39,15 @@ function create() {
     cursors = this.input.keyboard.createCursorKeys();
   
     // Create ground at the bottom of the screem
-    let ground = platforms.create(1200, 530, 'ground');
-    ground.setScale(1.2).refreshBody();  
+    let ground = platforms.create(3000, 2400, 'ground');
+    ground.setScale(25, 15).refreshBody();  
 
     //create dino coord 100 200
-    player = new Dinosaur(this, 500, 200);
+    player = new Dinosaur(this, 2500, 2300);
 
     //obsticale coord 3000 500
-    obsticale = new Obstacle(this, 3000, 500);
-    obsticale.setScale(0.2).refreshBody(); // Scale down the obstacle if needed
+    obsticale = new Obstacle(this, 5000, 2500);
+    obsticale.setScale(0.5).refreshBody(); // Scale down the obstacle if needed
 
     //allow to collide with ground and NOT fall
     this.physics.add.collider(player, platforms);
@@ -54,16 +55,16 @@ function create() {
 
 function update() 
 {
-    obsticale.setVelocityX(-350); // Adjust speed as needed
+    obsticale.setVelocityX(-500); // Adjust speed as needed
     // Reset obstacle position when it goes off screen
-    if (obsticale.x < 110) { // Assuming obstacle width is less than 50
-        obsticale.setX(3000); // Reset to starting position
+    if (obsticale.x < 1200) { // Assuming obstacle width is less than 50
+        obsticale.setX(5000); // Reset to starting position
 
     }
 
     // Check for spacebar input to jump
-    if (cursors.space.isDown) { // Only jump if on the ground
-        player.setVelocityY(-600); // Adjust jump strength as needed
+    if (cursors.space.isDown && (player.body.touching.down || player.body.blocked.down)) { // Only jump if on the ground
+        player.setVelocityY(-650); // Adjust jump strength as needed
     }
 
     //if it collides with obstical restart the game
@@ -74,11 +75,13 @@ function update()
     
 }
 
+//Configuration of game parameters, the brain basically
 const config = {
     type: Phaser.AUTO,
     parent: 'game-container',
-    width: 2375,
-    height: 1000,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    transparent: true,
     physics: {
         default: 'arcade',
         arcade: {
@@ -88,6 +91,7 @@ const config = {
     },
     scene: { preload: preload, create: create, update: update }
 };
+
 const game = new Phaser.Game(config);
 
 // Add this to the bottom of dinosourGame.js

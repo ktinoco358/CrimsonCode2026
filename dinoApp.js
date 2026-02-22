@@ -32,7 +32,6 @@ const createHandLandmarker = async () => {
         runningMode: runningMode,
         numHands: 2
     });
-    demosSection.classList.remove("invisible");
 };
 createHandLandmarker();
 
@@ -47,21 +46,6 @@ const canvasElement = document.getElementById("output_canvas");
 const canvasCtx = canvasElement.getContext("2d");
 const enableWebcamButton = document.getElementById("webcamButton");
 
-function enableCam(event) {
-    if (!handLandmarker) return;
-    webcamRunning = !webcamRunning;
-    enableWebcamButton.innerText = webcamRunning ? "DISABLE PREDICTIONS" : "ENABLE PREDICTIONS";
-
-    const constraints = { 
-        video: {width: 1920, height: 1080 } 
-    };
-    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-        video.srcObject = stream;
-        video.addEventListener("loadeddata", predictWebcam);
-    });
-}
-
-enableWebcamButton.addEventListener("click", enableCam);
 
 async function predictWebcam() {
     canvasElement.width = video.videoWidth;
@@ -111,7 +95,7 @@ async function predictWebcam() {
         const pixelX = Math.round(indexTip.x * widthT);
         const pixelY = Math.round(indexTip.y * heightT);
         
-        if (indexTip.y < 0.2) {
+        if (indexTip.y < 0.5) {
         // We call the function from your Phaser file
         if (typeof window.dinoJump === "function") {
             window.dinoJump();
@@ -121,7 +105,7 @@ async function predictWebcam() {
         
         console.log(`Finger is at Pixel: ${pixelX}px, ${pixelY}px`);
 
-        userCan.fillStyle = "black"
+        userCan.fillStyle = "red"
         userCan.fillRect(pixelX, pixelY, 20, 20);
     });
 
@@ -133,3 +117,24 @@ async function predictWebcam() {
         window.requestAnimationFrame(predictWebcam);
     }
 }
+
+async function startWebcamAutomatically() {
+    if (!handLandmarker) return;
+
+    const constraints = {
+        video: { width: 1920, height: 1080 }
+    };
+
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    video.srcObject = stream;
+
+    video.addEventListener("loadeddata", () => {
+        webcamRunning = true;
+        predictWebcam();
+    });
+}
+
+// Start automatically once the model is ready
+createHandLandmarker().then(() => {
+    startWebcamAutomatically();
+});
