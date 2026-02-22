@@ -64,7 +64,7 @@ async function predictWebcam() {
             const pixelX = Math.round(indexTip.x * widthT);
             const pixelY = Math.round(indexTip.y * heightT);
 
-            if (indexTip.y < 0.5 && typeof window.dinoJump === "function") {
+            if (indexTip.y < 0.5) {
                 window.dinoJump();
             }
 

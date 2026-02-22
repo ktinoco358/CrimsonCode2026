@@ -27,7 +27,7 @@ class Obstacle extends Phaser.Physics.Arcade.Sprite {
 //preload() characters
 function preload() {
     this.load.image('dino', 'assets/dino.png');
-    this.load.image('ground', 'assets/ground1.png');
+    this.load.image('ground', 'assets/ground2.png');
     this.load.image('obstacle', 'assets/cactus.png');
 }
 
@@ -43,8 +43,8 @@ function create() {
     cursors = this.input.keyboard.createCursorKeys();
   
     // Create ground at the bottom of the screem
-    let ground = platforms.create(3000, 2400, 'ground');
-    ground.setScale(25, 15).refreshBody();  
+    let ground = platforms.create(2850, 2500, 'ground');
+    ground.setScale(3,4).refreshBody();  
 
     //create dino coord 100 200
     player = new Dinosaur(this, 2500, 2300);
