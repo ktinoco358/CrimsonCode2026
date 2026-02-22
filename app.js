@@ -80,6 +80,13 @@ if (drawingGameBtn) {
     drawingGameBtn.addEventListener("click", () => { window.location.href = "drawingApp.html"; });
 }
 
+const tRexGameBtn = document.getElementById("tRexGame");
+if (tRexGameBtn) {
+    tRexGameBtn.addEventListener("click", () => { 
+        window.location.href = "dinoGame.html"; 
+    });
+}
+
 async function predictWebcam() {
     if (!isCanvasSized && video.videoWidth > 0) {
         canvasElement.width = window.innerWidth;

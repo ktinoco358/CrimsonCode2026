@@ -12,35 +12,71 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-@use "@material";
-#liveView {
-  font-family: roboto;
-  margin: 2em;
-  color: #3d3d3d;
-  --mdc-theme-primary: #007f8b;
-  --mdc-theme-on-primary: #f1f3f4;
-  max-width: fit-content;
-  overflow: hidden;  /* hide scrollbars */
-  z-index: 0
-
+@font-face {
+  font-family: 'star'; 
+  src: url('assets/shooting-star-personal-use/Shooting\ Star.ttf') format('ttf'),
+       url('assets/shooting-star-personal-use/Shooting\ Star.ttf') format('ttf'),
+       url('assets/shooting-star-personal-use/Shooting\ Star.ttf') format('truetype'); 
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
+
+@font-face {
+  font-family: 'sans';
+  src: url('assets/Smooch_Sans/SmoochSans-VariableFont_wght.ttf') format('ttf'),
+       url('assets/Smooch_Sans/SmoochSans-VariableFont_wght.ttf') format('ttf'),
+       url('assets/Smooch_Sans/SmoochSans-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 20;
+  padding: 10px 20px;
+  pointer-events: none;
+}
+
+
+header h1 {
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  margin: 0;
+  font-family: 'star', sans-serif;
+  font-size: 32px;
+  color: white;
+  padding: 10px; 
+  background: rgba(255, 255, 255, 0.1); 
+  border-radius: 8px;
+  pointer-events: auto;
+}
+
+header h2 {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  margin: 0;
+  font-family: 'sans', sans-serif;
+  font-size: 20px;
+  color: white;
+}
+
+
 #webcam {
-    position: absolute;
+    opacity: 0;
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0; /* behind everything */
-}
-
-h1 {
-  color: #007f8b;
-  text-align: center;
-  font-size: 500%;
-}
-
-h2 {
-  clear: both;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
 }
 
 section {
@@ -48,10 +84,6 @@ section {
   transition: opacity 500ms ease-in-out;
 }
 
-header,
-footer {
-  clear: both;
-}
 
 .removed {
   display: none;
@@ -66,15 +98,9 @@ footer {
   font-size: 130%;
 }
 
-.highlighter {
-  background: rgba(0, 255, 0, 0.25);
-  border: 1px dashed #fff;
-  z-index: 1;
-  position: absolute;
-}
 
 .canvas {
-  overflow: hidden;  /* hide scrollbars */
+  overflow: hidden;
   z-index: 1;
   pointer-events: none;
 }
@@ -88,22 +114,25 @@ footer {
 }
 
 #game-container {
-    overflow: hidden;  /* hide scrollbars */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+  z-index: 1;
+  background-color: #131314;
 }
 
 #output_canvas {
   position: absolute;
-  overflow: hidden;  /* hide scrollbars */
-  width: 100%;
-  height: 100%;
-  top: 0;
   left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10; 
   pointer-events: none;
-  z-index: 9999;
 }

@@ -5,7 +5,6 @@ let handLandmarker = undefined;
 let runningMode = "IMAGE";
 let webcamRunning = false;
 
-// Initialize the Landmarker
 const createHandLandmarker = async () => {
     const vision = await FilesetResolver.forVisionTasks(
         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
@@ -29,8 +28,10 @@ const canvasCtx = canvasElement.getContext("2d");
 const enableWebcamButton = document.getElementById("webcamButton");
 
 async function predictWebcam() {
-    canvasElement.width = video.videoWidth;
-    canvasElement.height = video.videoHeight;
+    if (canvasElement.width !== window.innerWidth) {
+        canvasElement.width = window.innerWidth;
+        canvasElement.height = window.innerHeight;
+    }
 
     if (runningMode === "IMAGE") {
         runningMode = "VIDEO";
@@ -44,39 +45,33 @@ async function predictWebcam() {
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
     if (results.landmarks) {
-        const drawingUtils = new DrawingUtils(canvasCtx);
-
-        for (const landmarks of results.landmarks) {
-            drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, {
-                color: "#00FF00",
-                lineWidth: 5
-            });
-            drawingUtils.drawLandmarks(landmarks, {
-                color: "#FF0000",
-                lineWidth: 2
-            });
-        }
-
         results.landmarks.forEach((hand) => {
             const indexTip = hand[8];
-            const widthT = userCanvas.width;
-            const heightT = userCanvas.height;
-            const pixelX = Math.round(indexTip.x * widthT);
-            const pixelY = Math.round(indexTip.y * heightT);
 
-            if (indexTip.y < 0.5) {
-                window.dinoJump();
+        const pixelX = (1 - indexTip.x) * canvasElement.width;
+        const pixelY = indexTip.y * canvasElement.height;
+
+
+        const backBtn = document.getElementById("backToHome");
+        if (backBtn) {
+            const rect = backBtn.getBoundingClientRect();
+            if (pixelX >= rect.left && pixelX <= rect.right && 
+                pixelY >= rect.top && pixelY <= rect.bottom) {
+                
+                window.location.href = "index.html";
             }
+        }
 
-            console.log(`Canvas Resolution: ${widthT} x ${heightT}`);
-            console.log(`Finger is at Pixel: ${pixelX}px, ${pixelY}px`);
+        if (indexTip.y < 0.4) { 
+            if (window.dinoJump) window.dinoJump();
+        }
 
-            // Draw a red box at the fingertip
-            const boxSize = 40;
-            canvasCtx.fillStyle = "rgba(255, 0, 0, 0.7)";
-            canvasCtx.fillRect(pixelX - boxSize / 2, pixelY - boxSize / 2, boxSize, boxSize);
-        });
-    }
+        canvasCtx.fillStyle = "#007f8b";
+        canvasCtx.beginPath();
+        canvasCtx.arc(pixelX, pixelY, 10, 0, Math.PI * 2);
+        canvasCtx.fill();
+    });
+}
 
     canvasCtx.restore();
 
@@ -98,7 +93,6 @@ async function startWebcamAutomatically() {
     });
 }
 
-// Start automatically once the model is ready
 createHandLandmarker().then(() => {
     startWebcamAutomatically();
 });

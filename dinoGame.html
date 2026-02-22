@@ -16,13 +16,20 @@ limitations under the License. -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dinosaur Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinosaur With Tiny Hands Jump</title>
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
     <link rel="stylesheet" href="dino.css">
 
 </head>
+<header>
+
+  <h1 id="backToHome" style="cursor: pointer; pointer-events: auto;"></h1>Handy Game</h1>
+  <h2>Dinosaur With Tiny Hands Jump</h2>
+
+</header>
+
 <body>
-  <h1>Temu Dinosaur Game</h1>
 
   <section id="demos" style="display: none;">
     <div id="liveView" class="videoView">
@@ -31,11 +38,13 @@ limitations under the License. -->
       </button>
       <div style="position: relative;">
         <video id="webcam" autoplay playsinline></video>
-        <canvas class="output_canvas" id="output_canvas" style="position: absolute; left: 0px; top: 0px;"></canvas>
+       
       </div>
     </div>
   </section>
-  <div id="game-container"> </div>
+  <div id="game-container">
+    <canvas class="output_canvas" id="output_canvas"></canvas>
+  </div>
 
 
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser-arcade-physics.min.js"></script>

@@ -1,126 +1,147 @@
 let player;
+let obsticale;
 let jumpCounter = 0;
 let isJumping = false;
-let gameOverText;
-
-//dinosaur class
-class Dinosaur extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y) {
-        super(scene, x, y, 'dino');
-        scene.add.existing(this);
-        scene.physics.add.existing(this);
-        this.setCollideWorldBounds(true); // Prevents walking off left/right
-    }
-}
-
-//obstical class
-class Obstacle extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y) {
-        super(scene, x, y, 'obstacle');
-        scene.add.existing(this);
-        scene.physics.add.existing(this);
-        this.setCollideWorldBounds(true);
-    }
-    
-}
-
-//preload() characters
-function preload() {
-    this.load.image('dino', 'assets/dino.png');
-    this.load.image('ground', 'assets/ground2.png');
-    this.load.image('obstacle', 'assets/cactus.png');
-}
-
-let cursors; 
 let jumpText;
+let isGameOver = false;
+let scoreResetReady = true;
 
+function preload() {
+    this.load.spritesheet('dino', 'assets/dinoGame/dinoS.png', {
+        frameWidth: 100,
+        frameHeight: 100
+
+    
+    });
+    this.load.image('ground', 'assets/dinoGame/floor.png');
+    this.load.image('obstacle', 'assets/dinoGame/cactus.png');
+}
 
 function create() {
-    //Static group for ground so it stays in gplace
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
     let platforms = this.physics.add.staticGroup();
-    
-    // Capture arrow keys for movement
-    cursors = this.input.keyboard.createCursorKeys();
-  
-    // Create ground at the bottom of the screem
-    let ground = platforms.create(2850, 2500, 'ground');
-    ground.setScale(3,4).refreshBody();  
 
-    //create dino coord 100 200
-    player = new Dinosaur(this, 2500, 2300);
 
-    //obsticale coord 3000 500
-    obsticale = new Obstacle(this, 5000, 2500);
-    obsticale.setScale(0.5).refreshBody(); // Scale down the obstacle if needed
-
-    //allow to collide with ground and NOT fall
-    this.physics.add.collider(player, platforms);
-
-    jumpText = this.add.text(2640, 150, 'Jump Counter: 0', {
-        font: '64px Arial',     // Font size and family
-        fill: '#000000',        // Text color
-        fontStyle: 'bold'       // Make the text bold
+    jumpText = this.add.text(this.cameras.main.width - 20, 20, 'Jump Counter: 0', {
+        fontFamily: 'star', 
+        fontSize: '32px',
+        fill: '#1e1f20',
+        fontStyle: 'bold'
     });
-    jumpText.setDepth(10);      // Make sure it appears above other objects
-    jumpText.setScrollFactor(0); // Keep text fixed on camera
+    
+    jumpText.setOrigin(1, 0); 
+    jumpText.setDepth(100);
+    jumpText.setScrollFactor(0);
+
+
 
     gameOverText = this.add.text(
         this.cameras.main.width / 2,
         this.cameras.main.height / 2,
-        'GAME OVER\n Jumps: ' + jumpCounter + '\nRestarting...',
+        'GAME OVER',
         {
-            font: '96px Arial',       // Big font
-            fill: '#FF0000',          // Red color
-            fontStyle: 'bold',        // Bold
+            fontFamily: 'sans',
+            fontSize: '80px',
+            fill: 'red',
             align: 'center'
         }
     );
+    gameOverText.setOrigin(0.5);
+    gameOverText.setScrollFactor(0);
+    gameOverText.setVisible(false);
+    gameOverText.setDepth(100);
 
-    gameOverText.setOrigin(0.5);       // Center the text
-    gameOverText.setScrollFactor(0);   // Stay fixed on camera
-    gameOverText.setVisible(false);    // Hide initially
+
+    let ground = platforms.create(width / 2, height - 20, 'ground');
+    ground.setDisplaySize(width, 40).refreshBody();
+
+
+    // animation
+        this.anims.create({
+            key: 'run',
+            frames: this.anims.generateFrameNumbers('dino', { start: 0, end: 1 }), 
+            frameRate: 10,
+            repeat: -1 
+        });
+    
+        this.anims.create({
+            key: 'jump',
+            frames: [{ key: 'dino', frame: 2 }],
+            frameRate: 10
+        });
+    
+        player = this.physics.add.sprite(100, window.innerHeight - 100, 'dino');
+        player.setCollideWorldBounds(true);
+        player.setScale(0.5);
+        player.refreshBody();
+        player.play('run');
+        
+    obsticale = this.physics.add.sprite(width + 200, height - 80, 'obstacle');
+    obsticale.setDepth(2);
+
+    obsticale.setScale(0.2); 
+    obsticale.refreshBody();
+
+    obsticale.body.setAllowGravity(false); 
+    obsticale.setImmovable(true);
+
+    this.physics.add.collider(player, platforms);
 }
 
-function update() 
-{
+function update() {
+    if (isGameOver) return; 
+
+    const width = this.cameras.main.width;
+
     if (player.body.touching.down || player.body.blocked.down) {
         isJumping = false;
-    }
-    obsticale.setVelocityX(-500); // Adjust speed as needed
-    // Reset obstacle position when it goes off screen
-    if (obsticale.x < 1200) { // Assuming obstacle width is less than 50
-        obsticale.setX(5000); // Reset to starting position
-
+        if (player.anims.currentAnim.key !== 'run') player.play('run');
+    } else {
+        player.play('jump', true);
     }
 
-    // Check for spacebar input to jump
-    if (cursors.space.isDown && (player.body.touching.down || player.body.blocked.down)) { // Only jump if on the ground
-        player.setVelocityY(-650); // Adjust jump strength as needed
+    obsticale.setVelocityX(-450); 
+
+    if (obsticale.x < player.x && scoreResetReady) {
+        jumpCounter++;
+        jumpText.setText('Score: ' + jumpCounter);
+        scoreResetReady = false;
     }
 
-    //if it collides with obstical restart the game
-    this.physics.add.collider(player, obsticale, () => {
-        console.log('Game Over');
+    if (obsticale.x < -100) {
+        obsticale.x = width + Math.random() * 400;
+        scoreResetReady = true;
+    }
 
-        if (gameOverText) {
-            gameOverText.setText('GAME OVER\n Jumps: ' + jumpCounter + '\nRestarting...'); // Update text with jump count
-            gameOverText.setVisible(true); // Show "Game Over" text
-        }
-        player.setVelocity(0, 0); // Stop player movement
-        obsticale.setVelocity(0, 0); // Stop obstacle movement
-        player.body.moves = false; // Prevent player from moving
-        obsticale.body.moves = false; // Prevent obstacle from moving
-
-        this.time.delayedCall(2000, () => {
-            jumpCounter = 0; // Reset jump counter
-            this.scene.restart(); // Restart the scene on collision
-        });
-        
+    this.physics.add.overlap(player, obsticale, () => {
+        die.call(this);
     }, null, this);
-    
 }
 
-//Configuration of game parameters, the brain basically
+function die() {
+    isGameOver = true;
+    
+    this.physics.pause();
+    
+    player.anims.stop();
+    player.setTint(0xff0000); 
+
+    if (gameOverText) {
+        gameOverText.setText('GAME OVER\nScore: ' + jumpCounter + '\nRestarting...');
+        gameOverText.setVisible(true);
+    }
+
+    this.time.delayedCall(2000, () => {
+        isGameOver = false;
+        jumpCounter = 0;
+        scoreResetReady = true;
+        this.scene.restart();
+    });
+}
+
+
 const config = {
     type: Phaser.AUTO,
     parent: 'game-container',
@@ -130,8 +151,8 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 500 }, // Increased gravity for a better "jump" feel
-            debug: true 
+            gravity: { y: 1200 },
+            debug: false
         }
     },
     scene: { preload: preload, create: create, update: update }
@@ -139,20 +160,8 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-
-// Add this to the bottom of dinosourGame.js
 window.dinoJump = function() {
-    // Only jump if player is on the ground AND not currently jumping
-    if (player && (player.body.touching.down || player.body.blocked.down) && !isJumping) {
-        player.setVelocityY(-600); // Make the dino jump
-        isJumping = true;          // Flag that dino is in the air
-
-        // Increment jump counter
-        jumpCounter++;
-
-        // Update the on-screen counter if it exists
-        if (jumpText) {
-            jumpText.setText('Jump Counter: ' + jumpCounter);
-        }
+    if (!isGameOver && player && (player.body.touching.down || player.body.blocked.down)) {
+        player.setVelocityY(-850); 
     }
 }
