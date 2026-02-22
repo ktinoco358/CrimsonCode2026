@@ -1,7 +1,8 @@
 # CrimsonCode2026
 
+The goal of Handy Games is to create applications we used growing up as kids, however they are controlled using our index finger. This makes it more accessible to people who may not have full boy function but still want to play games.
 
-
+Used phaser for video game physics
 WE used code from the visual finger reader from the MediaPipe library. Heres the disclosure they wanted us to put. 
 We eneded up modifying a lot of it for our needs.
 
